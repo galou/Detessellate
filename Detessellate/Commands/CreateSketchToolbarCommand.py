@@ -66,12 +66,15 @@ class CreateSketchToolbarCommand:
 
             # Create a callback that shows/hides the toolbar
             def on_workbench_changed():
-                current_wb = FreeCADGui.activeWorkbench()
-                is_sketcher = current_wb and current_wb.name() == "SketcherWorkbench"
-                toolbar.setVisible(is_sketcher)
+                try:
+                    current_wb = FreeCADGui.activeWorkbench()
+                    # More robust check - use class name instead of name() method
+                    is_sketcher = current_wb and current_wb.__class__.__name__ == "SketcherWorkbench"
+                    toolbar.setVisible(is_sketcher)
+                except Exception as e:
+                    FreeCAD.Console.PrintWarning(f"Error in workbench toggle: {e}\n")
 
             # Connect to workbench activated signal
-            # Note: This connection will persist for the session
             mw.workbenchActivated.connect(on_workbench_changed)
 
         except Exception as e:

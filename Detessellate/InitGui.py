@@ -36,6 +36,9 @@ class DetessellateWorkbench(FreeCADGui.Workbench):
     ToolTip = "Tools to reverse engineering meshes"
     Icon = os.path.join(FreeCAD.getUserAppDataDir(), "Mod", "Detessellate", "Resources", "icons", "detessellate.svg")
 
+    def __init__(self):
+        self._toolbar_created = False
+
     def Initialize(self):
         global commands
         # Commands are already registered globally, just add to toolbars/menus
@@ -48,9 +51,23 @@ class DetessellateWorkbench(FreeCADGui.Workbench):
             self.appendMenu("Detessellate", [cmd_name])
 
     def Activated(self):
-        pass
+        # Auto-create sketch toolbar on first activation
+        if not self._toolbar_created:
+            self._auto_create_sketch_toolbar()
+            self._toolbar_created = True
 
     def Deactivated(self):
         pass
+
+    def _auto_create_sketch_toolbar(self):
+        """Automatically create the Sketcher toolbar"""
+        try:
+            # Directly run the command by name
+            FreeCADGui.runCommand('CreateSketchToolbar')
+            FreeCAD.Console.PrintMessage("✓ Auto-created Detessellate Sketch Tools toolbar\n")
+        except Exception as e:
+            FreeCAD.Console.PrintWarning(f"Could not auto-create sketch toolbar: {e}\n")
+            import traceback
+            traceback.print_exc()
 
 FreeCADGui.addWorkbench(DetessellateWorkbench())
