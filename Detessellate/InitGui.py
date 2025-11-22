@@ -2,12 +2,13 @@ import FreeCAD
 import FreeCADGui
 import traceback
 
-print("Detessellate InitGui.py starting to load")
+#print("Detessellate InitGui.py starting to load")
 
 # Command specs: (command name, module path, class name, toolbar group)
 command_specs = [
     ("MeshPlacement", "Commands.MeshPlacementCommand", "MeshPlacementCommand", "Detessellate Mesh"),
     ("MeshToBody", "Commands.MeshToBodyCommand", "MeshToBodyCommand", "Detessellate Mesh"),
+    ("CoplanarSketch", "Commands.CoplanarSketchCommand", "CoplanarSketchCommand", "Detessellate Sketch"),
 ]
 
 commands = {}
@@ -22,12 +23,12 @@ for cmd_name, module_path, class_name, toolbar in command_specs:
         print(f"ERROR importing {cmd_name}: {e}")
         traceback.print_exc()
 
-print("Detessellate InitGui.py loaded")
+print("Detessellate workbench loaded")
 
 class DetessellateWorkbench(FreeCADGui.Workbench):
     MenuText = "Detessellate"
     ToolTip = "Tools to reverse engineer meshes"
-    Icon = "Detessellate/Macros/MeshPlacement/meshplacement.svg"
+    Icon = "Detessellate.svg"
 
     def Initialize(self):
         global commands
