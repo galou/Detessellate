@@ -10,7 +10,7 @@ class SketchReProfileCommand:
         return {
             'Pixmap': icon_path,
             'MenuText': 'Sketch ReProfile',
-            'ToolTip': 'Reprocess sketch profiles'
+            'ToolTip': 'Reprocess sketch profiles - converts construction lines to circles, arcs, and splines'
         }
 
     def Activated(self):
@@ -27,7 +27,8 @@ class SketchReProfileCommand:
             else:
                 import SketchReProfile
 
-            # Call the appropriate function based on the macro
+            # Call the main function
+            SketchReProfile.final_sketcher_main()
 
         except Exception as e:
             FreeCAD.Console.PrintError(f"Error running SketchReProfile: {e}\n")
@@ -36,4 +37,20 @@ class SketchReProfileCommand:
 
     def IsActive(self):
         # Active when a sketch is being edited
-        return FreeCADGui.activeDocument() is not None and FreeCADGui.ActiveDocument.getInEdit() is not None
+        try:
+            doc = FreeCADGui.activeDocument()
+            if doc is None:
+                return False
+
+            edit_obj = doc.getInEdit()
+            if edit_obj is None:
+                return False
+
+            # Check if it's a sketch object
+            if hasattr(edit_obj, 'Object'):
+                obj = edit_obj.Object
+                return hasattr(obj, 'TypeId') and 'Sketch' in obj.TypeId
+
+            return False
+        except:
+            return False

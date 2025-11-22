@@ -1,24 +1,29 @@
 import FreeCAD
 import FreeCADGui
 import traceback
+import os
 
 #print("Detessellate InitGui.py starting to load")
 
-# Command specs: (command name, module path, class name, toolbar group)
+# Command specs: (command name, module path, class name, toolbar group, show_in_toolbar)
 command_specs = [
-    ("MeshPlacement", "Commands.MeshPlacementCommand", "MeshPlacementCommand", "Detessellate Mesh"),
-    ("MeshToBody", "Commands.MeshToBodyCommand", "MeshToBodyCommand", "Detessellate Mesh"),
-    ("CoplanarSketch", "Commands.CoplanarSketchCommand", "CoplanarSketchCommand", "Detessellate Sketch"),
-    ("SketchReProfile", "Commands.SketchReProfileCommand", "SketchReProfileCommand", "Detessellate Sketch"),
+    ("MeshPlacement", "Commands.MeshPlacementCommand", "MeshPlacementCommand", "Detessellate Mesh", True),
+    ("MeshToBody", "Commands.MeshToBodyCommand", "MeshToBodyCommand", "Detessellate Mesh", True),
+    ("CoplanarSketch", "Commands.CoplanarSketchCommand", "CoplanarSketchCommand", "Detessellate Sketch", True),
+    ("CreateSketchToolbar", "Commands.CreateSketchToolbarCommand", "CreateSketchToolbarCommand", "Detessellate Sketch", False),  # Menu only
 ]
 
 commands = {}
 
-for cmd_name, module_path, class_name, toolbar in command_specs:
+for cmd_name, module_path, class_name, toolbar, show_in_toolbar in command_specs:
     try:
         module = __import__(module_path, fromlist=[class_name])
         cmd_class = getattr(module, class_name)
-        commands[cmd_name] = (cmd_class, toolbar)
+        commands[cmd_name] = (cmd_class, toolbar, show_in_toolbar)
+
+        # Register commands globally BEFORE workbench initialization
+        FreeCADGui.addCommand(cmd_name, cmd_class())
+
         print(f"{cmd_name} imported successfully")
     except Exception as e:
         print(f"ERROR importing {cmd_name}: {e}")
@@ -28,15 +33,18 @@ print("Detessellate workbench loaded")
 
 class DetessellateWorkbench(FreeCADGui.Workbench):
     MenuText = "Detessellate"
-    ToolTip = "Tools to reverse engineer meshes"
+    ToolTip = "Tools to reverse engineering meshes"
     Icon = os.path.join(FreeCAD.getUserAppDataDir(), "Mod", "Detessellate", "Resources", "icons", "detessellate.svg")
 
     def Initialize(self):
         global commands
-        # Register all successfully imported commands
-        for cmd_name, (cmd_class, toolbar) in commands.items():
-            FreeCADGui.addCommand(cmd_name, cmd_class())
-            self.appendToolbar(toolbar, [cmd_name])
+        # Commands are already registered globally, just add to toolbars/menus
+        for cmd_name, (cmd_class, toolbar, show_in_toolbar) in commands.items():
+            # Add to toolbar only if flagged True
+            if show_in_toolbar:
+                self.appendToolbar(toolbar, [cmd_name])
+
+            # Always add to menu
             self.appendMenu("Detessellate", [cmd_name])
 
     def Activated(self):

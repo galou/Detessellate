@@ -36,4 +36,4 @@ class SketcherWireDoctorCommand:
 
     def IsActive(self):
         # Active when a sketch is being edited
-        return FreeCADGui.activeDocument() is not None and FreeCADGui.ActiveDocument.getInEdit() is not None
+        return True #FreeCADGui.activeDocument() is not None and FreeCADGui.ActiveDocument.getInEdit() is not None
