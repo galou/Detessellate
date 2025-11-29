@@ -37,7 +37,9 @@ Install via **FreeCAD Addon Manager** by adding the Detessellate Repository to t
 7. Open **Addon Manager** and find **Detessellate** in the list.
 8. Click **Install**
 10. **Restart** FreeCAD.
-11. Access tools from the **Detessellate workbench** and/or the custom toolbars that the workbench creates.   
+11. Access tools from the **Detessellate workbench** and/or the custom toolbars that the workbench creates.
+
+<img width="885" height="932" alt="image" src="https://github.com/user-attachments/assets/8a0a0d23-7a0b-46d9-a032-3d1cb1f87fb2" />
 
 ## 📖 Roadmap
 - 📚 Expanded documentation and tutorials  
