@@ -1,7 +1,7 @@
 # Update VarSet labels :
 # 0. Oops, you want to change a variable name in VarSet :(
 # 1. Execute VarSetUpdate macro from the Macro > Macros... dialog.
-# 2. Use the dropdowns to select the VarSet and Poperty (variable) to be updated.
+# 2. Use the dropdowns to select the VarSet and Property (variable) to be updated.
 # 3. Modify the name or other attributes as necessary in the respective input fields.
 # 4. Click Update button.
 # 5. Voila !
