@@ -47,8 +47,8 @@ class CreatePartDesignToolbarCommand:
             is_partdesign = current_wb and current_wb.__class__.__name__ == "PartDesignWorkbench"
             custom_toolbar.setVisible(is_partdesign)
 
-            FreeCAD.Console.PrintMessage("✓ Created 'Detessellate PartDesign Tools' toolbar.\n")
-            FreeCAD.Console.PrintMessage("This toolbar appears only in PartDesign workbench.\n")
+            #FreeCAD.Console.PrintMessage("✓ Created 'Detessellate PartDesign Tools' toolbar.\n")
+            #FreeCAD.Console.PrintMessage("This toolbar appears only in PartDesign workbench.\n")
 
         except Exception as e:
             FreeCAD.Console.PrintError(f"Error creating PartDesign toolbar: {e}\n")
@@ -92,7 +92,7 @@ class CreatePartDesignToolbarCommand:
                 if action.objectName() == "Detessellate_TopoMatchSelector" or \
                    action.data() == "Detessellate_TopoMatchSelector" or \
                    action.text() == "Topo Match Selector":  # MenuText from GetResources
-                    FreeCAD.Console.PrintMessage(f"Found action: {action.objectName()}, text: {action.text()}\n")
+                    #FreeCAD.Console.PrintMessage(f"Found action: {action.objectName()}, text: {action.text()}\n")
                     toolbar.addAction(action)
                     return
 

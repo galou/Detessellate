@@ -48,9 +48,9 @@ class CreateSketchToolbarCommand:
             is_sketcher = current_wb and current_wb.name() == "SketcherWorkbench"
             custom_toolbar.setVisible(is_sketcher)
 
-            FreeCAD.Console.PrintMessage("✓ Created 'Detessellate Sketch Tools' toolbar.\n")
-            FreeCAD.Console.PrintMessage("This toolbar appears only in Sketcher workbench.\n")
-            FreeCAD.Console.PrintMessage("Note: Run this command again after restarting FreeCAD if needed.\n")
+            #FreeCAD.Console.PrintMessage("✓ Created 'Detessellate Sketch Tools' toolbar.\n")
+            #FreeCAD.Console.PrintMessage("This toolbar appears only in Sketcher workbench.\n")
+            #FreeCAD.Console.PrintMessage("Note: Run this command again after restarting FreeCAD if needed.\n")
 
         except Exception as e:
             FreeCAD.Console.PrintError(f"Error creating sketch toolbar: {e}\n")

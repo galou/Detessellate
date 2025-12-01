@@ -28,12 +28,12 @@ for cmd_name, module_path, class_name, toolbar, show_in_toolbar in command_specs
         # Register commands globally BEFORE workbench initialization
         FreeCADGui.addCommand(cmd_name, cmd_class())
 
-        print(f"{cmd_name} imported successfully")
+        #print(f"{cmd_name} imported successfully")
     except Exception as e:
         print(f"ERROR importing {cmd_name}: {e}")
         traceback.print_exc()
 
-print("Detessellate workbench loaded")
+#print("Detessellate workbench loaded")
 
 class DetessellateWorkbench(FreeCADGui.Workbench):
     # Must be imported here otherwise "name 'Path' is not defined".
@@ -73,7 +73,7 @@ class DetessellateWorkbench(FreeCADGui.Workbench):
         try:
             # Directly run the command by name
             FreeCADGui.runCommand('CreateSketchToolbar')
-            FreeCAD.Console.PrintMessage("✓ Auto-created Detessellate Sketch Tools toolbar\n")
+            #FreeCAD.Console.PrintMessage("✓ Auto-created Detessellate Sketch Tools toolbar\n")
         except Exception as e:
             FreeCAD.Console.PrintWarning(f"Could not auto-create sketch toolbar: {e}\n")
             import traceback
@@ -83,7 +83,7 @@ class DetessellateWorkbench(FreeCADGui.Workbench):
         """Automatically create the PartDesign toolbar"""
         try:
             FreeCADGui.runCommand('CreatePartDesignToolbar')
-            FreeCAD.Console.PrintMessage("✓ Auto-created Detessellate PartDesign Tools toolbar\n")
+            #FreeCAD.Console.PrintMessage("✓ Auto-created Detessellate PartDesign Tools toolbar\n")
         except Exception as e:
             FreeCAD.Console.PrintWarning(f"Could not auto-create PartDesign toolbar: {e}\n")
 
@@ -91,7 +91,7 @@ class DetessellateWorkbench(FreeCADGui.Workbench):
         """Automatically create the Global toolbar"""
         try:
             FreeCADGui.runCommand('CreateGlobalToolbar')
-            FreeCAD.Console.PrintMessage("✓ Auto-created Detessellate Global toolbar\n")
+            #FreeCAD.Console.PrintMessage("✓ Auto-created Detessellate Global toolbar\n")
         except Exception as e:
             FreeCAD.Console.PrintWarning(f"Could not auto-create Global toolbar: {e}\n")
 

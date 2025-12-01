@@ -44,8 +44,8 @@ class CreateGlobalToolbarCommand:
             # No workbench toggle needed - always visible
             custom_toolbar.setVisible(True)
 
-            FreeCAD.Console.PrintMessage("✓ Created 'Detessellate Global' toolbar.\n")
-            FreeCAD.Console.PrintMessage("This toolbar is visible in all workbenches.\n")
+            #FreeCAD.Console.PrintMessage("✓ Created 'Detessellate Global' toolbar.\n")
+            #FreeCAD.Console.PrintMessage("This toolbar is visible in all workbenches.\n")
 
         except Exception as e:
             FreeCAD.Console.PrintError(f"Error creating Global toolbar: {e}\n")
@@ -61,7 +61,7 @@ class CreateGlobalToolbarCommand:
             for action in mw.findChildren(QtGui.QAction):
                 if action.objectName() == command_name:
                     toolbar.addAction(action)
-                    FreeCAD.Console.PrintMessage(f"✓ Added {command_name} button\n")
+                    #FreeCAD.Console.PrintMessage(f"✓ Added {command_name} button\n")
                     return
 
             FreeCAD.Console.PrintWarning(f"Could not find {command_name} action\n")
