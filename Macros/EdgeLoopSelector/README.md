@@ -4,6 +4,12 @@
 
 A FreeCAD macro that automatically selects all edges in a connected loop from a single or dual edge selection. Works with both sketches and solid shapes.
 
+## ⚠️ **This repository is automatically synced from [Detessellate](https://github.com/DesignWeaver3D/Detessellate).**
+
+**Do not push changes directly to this repo** — they will be overwritten on the next sync.
+
+To contribute, make changes in the Detessellate repo under `Macros/EdgeLoopSelector/`.
+
 ## Features
 
 - **Smart Loop Detection**: Select one edge, get the entire connected loop
