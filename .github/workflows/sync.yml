@@ -69,6 +69,8 @@ jobs:
           echo "Target repo: DesignWeaver3D/${{ matrix.macro.repo }}"
           echo "================================================"
           cd satellite-repo
+
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/DesignWeaver3D/${{ matrix.macro.repo }}.git
           
           # Remove old content (except .git)
           find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +
@@ -85,8 +87,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Sync from Detessellate @ ${{ github.sha }}"
-            git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/DesignWeaver3D/${{ matrix.macro.repo }}.git
+            git commit -m "Sync from Detessellate @ ${{ github.sha }}"            
             git push origin main
             echo "✓ Sync complete for ${{ matrix.macro.name }}"
           fi
