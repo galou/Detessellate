@@ -5,12 +5,6 @@
 A FreeCAD macro to position one or more selected meshes at the global origin based on their bounding box.  
 This tool provides a dock widget with intuitive buttons to **center** or **align** meshes along X, Y, Z axes (or combinations like XY, XYZ). It works on single or multiple selected meshes, with undo safety and a clean UI layout.
 
-## ⚠️ **This repository is automatically synced from [Detessellate](https://github.com/DesignWeaver3D/Detessellate).**
-
-**Do not push changes directly to this repo** — they will be overwritten on the next sync.
-
-To contribute, make changes in the Detessellate repo under `Macros/MeshPlacement/`.
-
 <img width="1228" height="800" alt="image" src="https://github.com/user-attachments/assets/a15c7244-2c3f-4190-8c75-4178c0d279d4" />
 
 ---
@@ -32,7 +26,8 @@ To contribute, make changes in the Detessellate repo under `Macros/MeshPlacement
 
 ---
 
-## Installation
+## Alternative Installation
+This macro is bundled with the Detessellate Workbench, but can also be manually installed separately.
 
 1. Download `MeshPlacement.py`  
 2. Place it in your FreeCAD macros directory which can be determined in these locations:
