@@ -2,17 +2,15 @@
 
 <img width="128" height="128" alt="EdgeLoopToSketch" src="https://github.com/user-attachments/assets/2ed2553e-633c-4be4-aacc-32f5d4691915" />
 
-A FreeCAD macro that converts selected 3D edges into parametric sketches while preserving curve types (lines, arcs, circles, B-splines).
+A FreeCAD macro that converts selected coplanar 3D edges into parametric sketches while preserving curve types (lines, arcs, circles, B-splines).
 
 ## Why Use This Tool?
 
-When working with imported STEP files or existing 3D geometry, you often need to extract edge loops as parametric sketches for:
+When working with imported STEP files or existing nonparametric 3D geometry, you often need to extract edges as parametric sketches for:
 - Re-parametrizing imported CAD models
 - Creating profiles for new features based on existing geometry
 - Converting 3D edge loops to editable 2D sketches
 - Extracting reference geometry for design modifications
-
-Unlike tools that convert everything to line segments, EdgeLoopToSketch **preserves the original curve types**, giving you fully parametric sketches with circles, arcs, and B-splines intact.
 
 ## Features
 
@@ -20,14 +18,14 @@ Unlike tools that convert everything to line segments, EdgeLoopToSketch **preser
 - **Coplanarity Validation**: Automatically verifies selected edges are coplanar before conversion
 - **Smart Single-Edge Handling**: Can work with single circles, arcs, or planar B-splines
 - **Flexible Placement**: Choose between standalone sketch (Part) or PartDesign Body attachment
-- **Automatic Constraints**: Adds coincident constraints at shared vertices
+- **Automatic Constraints**: Adds coincident constraints at shared vertices, radius constraints to arcs and circles, and reference distance constraints to lines
 - **Full Undo Support**: Wrapped in FreeCAD transaction for easy undo
 
 ## Usage
 
 ### Basic Workflow
 
-1. **Select edges** from a 3D object (typically using [EdgeLoopSelector](../EdgeLoopSelector) to select complete loops)
+1. **Select coplanar edges** from a 3D object (typically using [EdgeLoopSelector](../EdgeLoopSelector) to select complete loops)
 2. **Run the macro**: `Macro → Macros... → EdgeLoopToSketch → Execute`
 3. **Choose destination**: Standalone sketch, new Body, or existing Body
 4. **Result**: Parametric sketch with preserved curve types
@@ -158,6 +156,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Changelog
 
+- **Version 2.0.0** (2025-12-08) - Fix flipping arcs. Added centerpoint, radius, and reference distance constraints to created sketch.
 - **Version 1.0.0** (2025-12-07): Initial release
   - Preserves curve types (lines, arcs, circles, B-splines)
   - Coplanarity validation
