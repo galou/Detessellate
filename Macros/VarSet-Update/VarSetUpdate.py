@@ -254,7 +254,6 @@ class UpdateVarSetDialog(QtGui.QDialog):
             "App::PropertyLength",
             "App::PropertyInteger",
             "App::PropertyString",
-            "App::PropertyFloat",
             "App::PropertyPercent",
             "App::PropertyQuantity"
         ]
