@@ -3,29 +3,30 @@
 ***************************************************************************
 *   FreeCAD Addon Manager Macro                                           *
 *   Name:        MeshPlacement                                            *
-*   Author:      NSUBB (aka DesignWeaver)                                *
+*   Author:      DesignWeaver3D (formerly NSUBB)                          *
 *   License:     GNU GPL v3.0                                             *
-*   Version:     1.0.0                                                    *
-*   Date:        2025-11-21                                               *
+*   Version:     1.1.0                                                    *
+*   Date:        2025-12-11                                               *
 *   FreeCAD:     1.0.2 or later                                           *
 *   Description:                                                          *
-*       A FreeCAD macro to position one or more selected meshes at the    *
-*       global origin based on their bounding box.                        *
+*       A FreeCAD macro to position one or more selected meshes or parts  *
+*       at the global origin based on their bounding box.                 *
 *                                                                         *
 *   This macro provides a dock widget with buttons to center or align     *
-*   meshes along X, Y, Z axes or combinations (XY, XYZ). Works on one     *
-*   or multiple selected meshes, with undo safety and clean UI grouping.  *
+*   objects along X, Y, Z axes or combinations (XY, XYZ). Works on one    *
+*   or multiple selected meshes or parts, with undo safety and clean UI   *
+*   grouping. Now supports imported STEP files and other Part objects.    *
 ***************************************************************************
 """
 
 __title__   = "MeshPlacement"
-__author__  = "NSUBB (aka DesignWeaver)"
+__author__  = "DesignWeaver3D (formerly NSUBB)"
 __license__ = "GNU GPL v3.0"
-__version__ = "1.0.0"
-__date__    = "2025-11-21"
+__version__ = "1.1.0"
+__date__    = "2025-12-11"
 __FreeCAD__ = "1.0.2 or later"
-__url__     = "https://github.com/NSUBB/MeshPlacement"
-__doc__     = "A FreeCAD macro to position selected meshes at the global origin using bounding box alignment."
+__url__     = "https://github.com/DesignWeaver3D/MeshPlacement"
+__doc__     = "A FreeCAD macro to position selected meshes or parts at the global origin using bounding box alignment."
 
 import FreeCAD, FreeCADGui
 from PySide import QtGui, QtCore
@@ -81,12 +82,30 @@ class MeshPlacementDock(QtGui.QDockWidget):
         self.widget.setLayout(main_layout)
         self.setWidget(self.widget)
 
-    def getMeshes(self):
+    def getObjects(self):
+        """Get selected objects that are either meshes or parts with shapes."""
         sel = FreeCADGui.Selection.getSelection()
-        meshes = [obj for obj in sel if obj.TypeId.startswith("Mesh::Feature")]
-        if not meshes:
-            FreeCAD.Console.PrintError("Select one or more Mesh objects.\n")
-        return meshes
+        valid_objects = []
+
+        for obj in sel:
+            # Check if it's a mesh
+            if hasattr(obj, 'Mesh'):
+                valid_objects.append(('mesh', obj))
+            # Check if it's a part with a shape
+            elif hasattr(obj, 'Shape'):
+                valid_objects.append(('part', obj))
+
+        if not valid_objects:
+            FreeCAD.Console.PrintError("Select one or more Mesh or Part objects.\n")
+
+        return valid_objects
+
+    def _getBoundBox(self, obj_type, obj):
+        """Get bounding box for either mesh or part object."""
+        if obj_type == 'mesh':
+            return obj.Mesh.BoundBox
+        else:  # 'part'
+            return obj.Shape.BoundBox
 
     # --- Centering methods ---
     def centerXYZ(self): self._applyShift("xyz")
@@ -104,13 +123,13 @@ class MeshPlacementDock(QtGui.QDockWidget):
     def alignBack(self):   self._applyAlign("back")
 
     def _applyShift(self, mode):
-        meshes = self.getMeshes()
-        if not meshes: return
+        objects = self.getObjects()
+        if not objects: return
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(f"Center {mode.upper()}")
 
-        for obj in meshes:
-            bb = obj.Mesh.BoundBox
+        for obj_type, obj in objects:
+            bb = self._getBoundBox(obj_type, obj)
             cx, cy, cz = (bb.XMin+bb.XMax)/2, (bb.YMin+bb.YMax)/2, (bb.ZMin+bb.ZMax)/2
             x,y,z = obj.Placement.Base
             if mode=="xyz": obj.Placement.Base = FreeCAD.Vector(x-cx,y-cy,z-cz)
@@ -121,16 +140,16 @@ class MeshPlacementDock(QtGui.QDockWidget):
 
         doc.recompute()
         doc.commitTransaction()
-        FreeCAD.Console.PrintMessage(f"Meshes recentered ({mode.upper()}).\n")
+        FreeCAD.Console.PrintMessage(f"Objects recentered ({mode.upper()}).\n")
 
     def _applyAlign(self, mode):
-        meshes = self.getMeshes()
-        if not meshes: return
+        objects = self.getObjects()
+        if not objects: return
         doc = FreeCAD.ActiveDocument
         doc.openTransaction(f"Align {mode.capitalize()}")
 
-        for obj in meshes:
-            bb = obj.Mesh.BoundBox
+        for obj_type, obj in objects:
+            bb = self._getBoundBox(obj_type, obj)
             x,y,z = obj.Placement.Base
             if mode=="top":    obj.Placement.Base = FreeCAD.Vector(x,y,z-bb.ZMax)
             if mode=="bottom": obj.Placement.Base = FreeCAD.Vector(x,y,z-bb.ZMin)
@@ -141,7 +160,7 @@ class MeshPlacementDock(QtGui.QDockWidget):
 
         doc.recompute()
         doc.commitTransaction()
-        FreeCAD.Console.PrintMessage(f"Meshes aligned ({mode}).\n")
+        FreeCAD.Console.PrintMessage(f"Objects aligned ({mode}).\n")
 
 # --- Ensure only one dock instance ---
 mw = FreeCADGui.getMainWindow()
